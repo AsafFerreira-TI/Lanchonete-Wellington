@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categoria;
+use App\Http\Requests\CategoriaRequest;
 
 class CategoriaController extends Controller
 {
@@ -27,13 +28,10 @@ class CategoriaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoriaRequest $request)
     {
-        $dados = $request->validate([
-            'nome' => 'required|string|max:100|unique:categorias,nome',
-            'descricao' => 'nullable|string|max:500',
-            'ativa' => 'required|boolean',
-        ]);
+        $dados = $request->validated();
+        $dados['ativa'] = $request->boolean('ativa'); // Garante que o campo 'ativa' seja tratado como booleano
 
         Categoria::create($dados);
 
@@ -59,13 +57,10 @@ class CategoriaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Categoria $categoria)
+    public function update(CategoriaRequest $request, Categoria $categoria)
     {
-        $dados = $request->validate([
-            'nome' => 'required|string|max:100|unique:categorias,nome,' . $categoria->id,
-            'descricao' => 'nullable|string|max:500',
-            'ativa' => 'required|boolean',
-        ]);
+        $dados = $request->validated();
+        $dados['ativa'] = $request->boolean('ativa'); // Garante que o campo 'ativa' seja tratado como booleano
 
         $categoria->update($dados);
         return redirect()->route('categorias.index')->with('success', 'Categoria atualizada com sucesso!');
