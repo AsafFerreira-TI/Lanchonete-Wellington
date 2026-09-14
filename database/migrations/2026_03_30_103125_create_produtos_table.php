@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('descricao');
             $table->decimal('preco', 10, 2)->default(0);
             $table->boolean('ativo')->default(true);
+            $table->string('imagem')->nullable();
             $table->timestamps();
         });
     }

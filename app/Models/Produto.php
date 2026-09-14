@@ -17,6 +17,7 @@ class Produto extends Model
         'descricao',
         'preco',
         'ativo',
+        'imagem',
     ];
 
     public function categoria(){

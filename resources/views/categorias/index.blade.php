@@ -2,6 +2,17 @@
 @section('title', 'Categorias')
 @section('content')
     @include('partials.alerts')
+    
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+
+        <form method="GET" action="{{ route('categorias.index') }}" class="d-flex gap-2">
+            @csrf
+            <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Buscar por nome...">
+            <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+            <a class="btn btn-outline-secondary" href="{{ route('categorias.index') }}">Limpar</a>
+        </form>
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Categorias</h2>
         <a href="{{ route('categorias.create') }}" class="btn btn-primary">Nova Categoria</a>
@@ -46,4 +57,10 @@
                     @endforelse
                 </tbody>
             </table>
+
+            <div class="mt-3">
+                {{ $categorias->links() }}
+            </div>
         </div>
+    </div>
+@endsection

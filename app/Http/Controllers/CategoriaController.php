@@ -13,8 +13,14 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        $categorias = Categoria::orderBy('nome')->get();
-        return view('categorias.index', compact('categorias'));
+        $q = request('q');
+        $categorias = Categoria::query()-> when($q, function($query) use ($q) {
+            $query->where('nome', 'like', "%$q%");
+        })->orderBy('nome')
+        ->paginate(10)
+        ->withQueryString();
+
+        return view('categorias.index', compact('categorias', 'q'));
     }
 
     /**
@@ -69,10 +75,9 @@ class CategoriaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Categoria $categoria)
     {
-        $categoria = Categoria::findOrFail($id);
         $categoria->delete();
-        return redirect()->route('categorias.index')->with('sucesso', 'Categoria excluída com sucesso!');
+        return redirect()->route('categorias.index')->with('success', 'Categoria excluída com sucesso!');
     }
 }
