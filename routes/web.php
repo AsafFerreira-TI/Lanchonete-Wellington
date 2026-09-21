@@ -28,7 +28,7 @@ Route::middleware(['auth'])->group(function (){
     Route::resource('categorias', CategoriaController::class);
     Route::resource('pedidos', PedidoController::class);
 
-    Route::post('pedidos/{pedido}/itens', [ItemPedidoController::class, 'store'])->name('pedidos.itens.store');
-    Route::delete('pedidos/{pedido}/]itens/{itemPedido}', [ItemPedidoController::class, 'destroy'])-> name('pedidos.itens.destroy');
+    Route::post('pedidos/{pedido}/itens-json', [ItemPedidoController::class, 'storeJson'])->name('pedidos.itens.storeJson');
+    Route::delete('pedidos/{pedido}/itens-json/{itemPedido}', [ItemPedidoController::class, 'destroyJson'])->name('pedidos.itens.destroyJson');
 });
 

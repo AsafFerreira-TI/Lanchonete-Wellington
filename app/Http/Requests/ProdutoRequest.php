@@ -35,6 +35,11 @@ class ProdutoRequest extends FormRequest
             ],
             'preco' => 'required|numeric|min:0.01',
             'categoria_id' => 'required|exists:categorias,id',
+            'descricao' => [
+                'nullable',
+                'string',
+                'max:500',
+            ],
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'ativo' => 'nullable|boolean',
         ];
@@ -52,6 +57,7 @@ class ProdutoRequest extends FormRequest
             'categoria_id.required' => 'Informe a categoria do produto.',
             'categoria_id.exists' => 'A categoria informada não existe.',
             'ativo.boolean' => 'O campo ativo deve ser um valor booleano.',
+            'descricao.max' => 'A descrição do produto deve ter no máximo :max caracteres',
             'imagem.image' => 'A imagem deve ser um arquivo de imagem válido.',
             'imagem.mimes' => 'A imagem deve ser um dos seguintes tipos: jpeg, png, jpg, webp.',
             'imagem.max' => 'A imagem não pode exceder 2MB.',

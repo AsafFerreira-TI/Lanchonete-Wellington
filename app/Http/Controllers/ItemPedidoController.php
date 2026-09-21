@@ -9,7 +9,7 @@ use App\Models\Produto;
 
 class ItemPedidoController extends Controller
 {
-    public function store(Request $request, Pedido $pedido){
+    public function storeJson(Request $request, Pedido $pedido){
         $dados = $request->validate([
             'produto_id' => 'required|exists:produtos,id',
             'quantidade' => 'required|integer|min:1|max:99',
@@ -40,18 +40,42 @@ class ItemPedidoController extends Controller
         // Recalcular total
         $pedido->total = itemPedido::where('pedido_id', $pedido->id)->sum('subtotal');
         $pedido->save();
+        
+        return response()->json([
+            'message' => 'Item adicionado!',
+            'pedido' => [
+                'id' => $pedido->id,
+                'total' => (float) $pedido->total,
+            ],
 
-        return redirect()->route('pedidos.edit', $pedido)->with('success', 'Item adicionado ao pedido!');
+            'item' => [
+                'id' => $item->id,
+                'produto' => [
+                    'id' => $item->produto->id,
+                    'nome' => $item->produto->nome,
+                ],
+                'quantidade' => (int) $item->quantidade,
+                'preco_unitario' => (float) $item->preco_unitario,
+                'subtotal' => (float) $item->subtotal,
+            ]
+        ], 200);
     }
 
-    public function destroy(Pedido $pedido, ItemPedido $itemPedido){
+    public function destroyJson(Pedido $pedido, ItemPedido $itemPedido){
         // Garante que o tem pertence ao pedido
         abort_unless($itemPedido->pedido_id === $pedido->id, 404);
         $itemPedido->delete();
 
         $pedido->total = ItemPedido::where('pedido_id', $pedido->id)->sum('subtotal');
         $pedido->save();
-
-        return redirect()->route('pedidos.edit', $pedido)->with('success', 'Item removido!');
+        
+        return response()->json([
+            'message' => 'Item removido!',
+            'pedido' => [
+                'id' => $pedido->id,
+                'total' => (float) $pedido-> total,
+            ],
+            'removed_item_id' => (int) $itemPedido->id,
+        ], 200);
     }
 }
