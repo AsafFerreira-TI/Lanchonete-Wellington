@@ -18,6 +18,7 @@ class ItemPedidoController extends Controller
         $produto = Produto::findOrFail($dados['produto_id']); // $produto deve ser igual aos dados da classe Produto
 
         $preco = $produto->preco; // $preco acessa o preço do objeto conceitual produto
+
         $subtotal = $preco * $dados['quantidade']; // o subtotal de cada item é determinado pela quantidade do produto adicionado ao carrinho.
 
         $item = ItemPedido::where('pedido_id', $pedido->id)->where('produto_id', $produto->id)->first(); // o item deve ser correspondente ao que já foi registrado em ItemPedido, correspondente ao id do produto
@@ -40,6 +41,8 @@ class ItemPedidoController extends Controller
         // Recalcular total
         $pedido->total = itemPedido::where('pedido_id', $pedido->id)->sum('subtotal');
         $pedido->save();
+
+        $item->load('produto');
         
         return response()->json([
             'message' => 'Item adicionado!',

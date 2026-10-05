@@ -24,7 +24,7 @@ class PedidoController extends Controller
     public function store(Request $request)
     {
         $pedido = Pedido::create([
-            'user_id' => auth(),
+            'user_id' => auth()->id(),
             'status' => 'aberto',
             'total' => 0,
             'observacoes' => $request->input('observacoes'),
