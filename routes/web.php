@@ -9,6 +9,7 @@ use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\ItemPedidoController;
+use App\Http\Controllers\CepController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/sobre', [SobreController::class, 'index'])->name('sobre');
@@ -30,5 +31,7 @@ Route::middleware(['auth'])->group(function (){
 
     Route::post('pedidos/{pedido}/itens-json', [ItemPedidoController::class, 'storeJson'])->name('pedidos.itens.storeJson');
     Route::delete('pedidos/{pedido}/itens-json/{itemPedido}', [ItemPedidoController::class, 'destroyJson'])->name('pedidos.itens.destroyJson');
+
+    Route::get('/cep/{cep}', [CepController::class, 'show'])->name('cep.show');
 });
 
